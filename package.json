@@ -16,14 +16,23 @@
     "test": "node node_modules/jest/bin/jest.js"
   },
   "jest": {
-    "preset": "jest-expo"
+    "preset": "jest-expo",
+    "transformIgnorePatterns": [
+      "node_modules/(?!(jest-)?react-native|react-navigation|@expo/*|expo|native-base|redux-enhancer)"
+    ]
   },
   "dependencies": {
+    "debug": "^3.1.0",
     "expo": "^25.0.0",
+    "gdax": "^0.6.0",
+    "lodash": "^4.17.5",
+    "native-base": "^2.3.10",
     "react": "16.2.0",
     "react-native": "0.52.0",
     "react-redux": "^5.0.7",
     "redux": "^3.7.2",
-    "redux-saga": "^0.16.0"
+    "redux-enhancer-react-native-appstate": "^0.3.1",
+    "redux-saga": "^0.16.0",
+    "reselect": "^3.0.1"
   }
 }
