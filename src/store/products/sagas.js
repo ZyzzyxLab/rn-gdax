@@ -10,7 +10,7 @@ function* fetchProducts() {
   try {
     // const products = yield call(gdaxClient.getProducts);
     const products = yield call(api.getProducts);
-    yield put(actions.productsList());
+    yield put(actions.productsList(products));
   }
   catch (err) {
     yield put(actions.productsError(err));
