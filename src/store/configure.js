@@ -2,7 +2,7 @@ import { createStore, applyMiddleware, combineReducers, compose } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import applyAppStateListener from 'redux-enhancer-react-native-appstate';
 
-import reducers, { sagas } from './reducers';
+import reducers, { rootSaga } from './reducers';
 
 export default function configureStore (initialState) {
   const rootReducer = combineReducers({
@@ -23,7 +23,7 @@ export default function configureStore (initialState) {
 
   const store = createStore(rootReducer, initialState, enhancers);
 
-  sagaMiddleware.run(sagas[0]);
+  sagaMiddleware.run(rootSaga);
 
   return store;
 }

@@ -1,39 +1,27 @@
 import React, { PureComponent } from 'react';
-import { Stylesheet, SectionList, View, Text } from 'react-native';
-import { Card, CardItem, Container, Text as NbText, Icon, Right } from 'native-base';
+import { Stylesheet, SectionList, View, Text, Button } from 'react-native';
+import { Card, CardItem, Container, Text as NbText, Icon, Right, Left } from 'native-base';
+import { isNil, isEmpty } from 'lodash';
 
 import { connect } from 'react-redux';
 import { groupBy, map } from 'lodash';
 
-import { fetchProducts, selectProduct } from '../../store/products/actions';
+import * as productActions from '../../store/products/actions';
 import * as selectors from '../../store/products/selectors';
-
-const ListItem = ({ item }) => (
-  <View style={styles.item}>
-    <Text>Product: {item.display_name}</Text>
-    <View>
-      <Text>Quote Increment: {item.quote_increment}</Text>
-      <Text>Base Min Size: {item.base_min_size}</Text>
-      <Text>Base Max Size: {item.base_max_size}</Text>
-    </View>
-  </View>
-);
-
-const SectionHeader = ({ section }) => (
-  <View>
-    <Text>{section.base_currency}</Text>
-  </View>
-)
 
 const ProductCardItem = ({ currency, products, select }) => {
   const items = map(products, p => (
-    <CardItem button={() => select(p.id) }>
-      <NbText>Product: {p.display_name}</NbText>
-      <Container>
+    <CardItem
+      key={p.id}
+      button={true}
+      onPress={() => console.log(`selecting: ${p.display_name}`) && select(p.id) }
+    >
+      <NbText>{p.display_name}</NbText>
+      <Left>
         <NbText>Quote Increment: {p.quote_increment}</NbText>
         <NbText>Base Min Size: {p.base_min_size}</NbText>
         <NbText>Base Max Size: {p.base_max_size}</NbText>
-      </Container>
+      </Left>
       <Right>
         <Icon name="arrow-forward" />
       </Right>
@@ -49,44 +37,53 @@ const ProductCardItem = ({ currency, products, select }) => {
   );
 };
 
+const needToLoad = currencies => isNil(currencies) || isEmpty(currencies);
+
 class ProductList extends PureComponent {
-  // constructor(props) {
-  //   super(props);
-  // }
-
-  componentDidMount() {
-    this.props.fetchProducts();
-  }
-
   render() {
-    const { currencies, currentProduct, selectProduct } = this.props;
-    const cards = map(currencies, (products, currency) => (
-      <ProductCardItem currency={currency} products={products} select={selectProduct} />
-    ));
+    const {
+      currencies,
+      currentProduct,
+      selectProduct,
+      fetchProducts
+    } = this.props;
+    let cards = null;
+    if (needToLoad(currencies)) {
+      console.log('need to load');
+      cards = (
+        <Button
+          onPress={fetchProducts}
+          title="Load Products"
+          color="purple"
+        />
+      );
+    }
+    else {
+      cards = map(currencies, (products, currency) => (
+        <ProductCardItem
+          key={currency}
+          currency={currency}
+          products={products}
+          select={selectProduct}
+        />
+      ));
+    }
     return (
       <Container>
         {cards}
       </Container>
     );
-    // return (
-    //   {/*<SectionList
-    //     sections={currencies}
-    //     keyExtractor={({ id }) => id }
-    //     renderItem={ListItem}
-    //     renderSectionHeader={SectionHeader}
-    //   />*/}
-    // );
   }
 }
 
 const mapStateToProps = state => ({
-  currencies: selectors.selectCurrencies,
-  currentProduct: selectors.selectCurrentProduct,
+  currencies: selectors.selectCurrencies(state),
+  currentProduct: selectors.selectCurrentProduct(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  fetchProducts: () => dispatch(fetchProducts()),
-  selectProduct: id => dispatch(selectProduct(id)),
+  fetchProducts: () => dispatch(productActions.fetchProducts()),
+  selectProduct: id => dispatch(productActions.selectProduct(id)),
 });
 
 const ProductListContainer = connect(mapStateToProps, mapDispatchToProps)(ProductList);

@@ -1,5 +1,5 @@
 import debug from 'debug';
-// import fetch from 'fetch-everywhere';
+import fetch from 'fetch-everywhere';
 
 const log = debug('rn-gdax:api:request');
 

@@ -16,14 +16,14 @@ const buildApiUrl = endpoint => (process.env.IS_BROWSER ? `${API_PATH}${API_VERS
   : `${API_PROTOCOL}://${API_HOST}${API_VERSION}${endpoint}`);
 
 const alwaysSendOptions = {
-  credentials: 'include',
+  // credentials: 'include',
 };
 
 const SET_HEADERS = {
   'content-type': 'application/json',
 };
 
-const apiRequester = ({ token }) => (endpoint, options = {}) =>
+const apiRequester = /*({ token }) =>*/ (endpoint, options = {}) =>
   new Promise(async (resolve, reject) => {
     log('making call using:', { endpoint, options });
     const headersToSend = new Headers();
@@ -53,8 +53,10 @@ const apiRequester = ({ token }) => (endpoint, options = {}) =>
       const sendOptions = {
         ...alwaysSendOptions,
         ...otherOpts,
-        ...!!options.body && { body: JSON.stringify(options.body) },
       };
+      if (sendOptions.body) {
+        sendOptions.body = JSON.stringify(sendOptions.body);
+      }
       sendOptions.headers = headersToSend;
       log('sending with headers:', headersToSend);
 

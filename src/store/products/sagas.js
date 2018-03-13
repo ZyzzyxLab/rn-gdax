@@ -6,7 +6,7 @@ import * as actions from './actions';
 
 // const gdaxClient = new PublicClient();
 
-function* fetchProducts() {
+function* fetchProducts(action) {
   try {
     // const products = yield call(gdaxClient.getProducts);
     const products = yield call(api.getProducts);
@@ -16,6 +16,8 @@ function* fetchProducts() {
     yield put(actions.productsError(err));
   }
 }
+
+export { fetchProducts };
 
 function* productsSaga() {
   yield takeLatest(types.PRODUCTS_FETCH, fetchProducts);

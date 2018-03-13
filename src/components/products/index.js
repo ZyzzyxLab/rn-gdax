@@ -22,7 +22,7 @@ const Products = ({ loading }) => (
 );
 
 const mapStateToProps = state => ({
-  loading: selectProductsLoading,
+  loading: selectProductsLoading(state),
 });
 
 

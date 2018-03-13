@@ -1,4 +1,4 @@
-import { all } from 'redux-saga/effects';
+import { all, fork } from 'redux-saga/effects';
 import * as products from './products';
 
 const reducers = {
@@ -8,10 +8,12 @@ const reducers = {
 const sagas = [];
 sagas.push(products.sagas);
 
-// function* rootSaga() {
-//   yield all(sagas.map(s => s()));
-// }
+export { sagas };
+
+function* rootSaga() {
+  yield all(sagas.map(s => fork(s)));
+}
 
 export default reducers;
 
-export { sagas };
+export { rootSaga };
