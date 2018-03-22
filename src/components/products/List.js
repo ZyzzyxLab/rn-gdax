@@ -14,7 +14,7 @@ const ProductCardItem = ({ currency, products, select }) => {
     <CardItem
       key={p.id}
       button={true}
-      onPress={() => console.log(`selecting: ${p.display_name}`) && select(p.id) }
+      onPress={() => console.log(`selecting: ${p.display_name}`) & select(p.id) }
     >
       <NbText>{p.display_name}</NbText>
       <Left>

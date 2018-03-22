@@ -1,8 +1,11 @@
+import _ from 'lodash';
 import { groupBy } from 'lodash';
 import { createSelector } from 'reselect';
 import { STORE_KEY } from './types';
 
-export const selectProductsState = state => state[STORE_KEY];
+const hydrate = getState => _.isFunction(getState) ? getState() : getState;
+
+export const selectProductsState = state => hydrate(state[STORE_KEY]);
 
 export const selectProductsLoading = state => selectProductsState(state).fetching;
 

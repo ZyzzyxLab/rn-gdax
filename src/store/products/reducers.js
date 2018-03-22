@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   list: {},
   fetching: false,
   currentProductId: null,
+  prices: [],
   loadingError: null,
 };
 
@@ -44,14 +45,30 @@ HANDLERS[types.PRODUCTS_ERROR] = (state, { payload, error }) => {
 };
 
 HANDLERS[types.PRODUCT_SELECT] = (state, { payload }) => ({
-  ...state,
-  currentProductId: payload.id,
+    ...state,
+    currentProductId: payload.id,
 });
+
+HANDLERS[types.PRODUCT_CLEAR_PRICES] = (state) => ({
+  ...state,
+  prices: [],
+});
+
+HANDLERS[types.PRODUCT_PRICE] = (state, { payload }) => {
+  const lastPrice = state.prices[0];
+  if (lastPrice && (lastPrice.sequence > payload.sequence)) {
+    // drop sequences that are missed
+    return state;
+  }
+  state.prices.unshift(payload);
+  return state;
+};
 
 export default function reducer (state = INITIAL_STATE, action) {
   if (isNil(action)) {
     return state;
   }
+  console.log(`called reducer on ${action.type} with payload:`, action.payload);
   const handler = HANDLERS[action.type];
 
   return handler ? handler(state, action) : state;
