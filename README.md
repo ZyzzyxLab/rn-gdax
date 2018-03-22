@@ -6,8 +6,15 @@ This project was bootstrapped with [Create React Native App](https://github.com/
 
 Very small project to create a code sample for evaluation of a React-Native app that consumes the [GDAX API](https://docs.gdax.com)
 
-Unfortunately, currently the project is **not** working locally, and as I'm still learning React-Native, I don't have the troubleshooting
-skills with it yet to understand why it's not working.
+The project is **now** working locally.
+
+### Starting
+
+```sh
+yarn start
+```
+
+And follow the instructions printed to the console
 
 ## Validating
 
